@@ -1,2 +1,2 @@
-# Pingpong game
-The game to play pingpong against AI.
+# Ping-pong game
+The game to play ping pong against AI.
