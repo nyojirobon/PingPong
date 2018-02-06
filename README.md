@@ -1,4 +1,2 @@
-# 卓球ゲーム
-これはAIと卓球で点数を競うゲームです。
-
-作成中。。。
+# Pingpong game
+The game to play pingpong against AI.
