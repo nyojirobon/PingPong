@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Ping Pong</title>
+    <style>
+    	*{ padding: 0; margin: 0; }
+    	canvas { background: #008000; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="field" width="600" height="400"></canvas>
+
+<script>
+    var field = document.getElementById("field");
+    var ctx = field.getContext("2d");
+    var x;
+    var y;
+    var dx;
+    var dy;
+    var ballRadius = 10;
+    var paddleHeight = 10;
+    var paddleWidth = 80;
+    var playerPaddleX;
+    var opponentPaddleX;
+    var rightPressed = false;
+    var leftPressed = false;
+
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+    function keyDownHandler(e){
+      if(e.keyCode == 39){
+        rightPressed = true;
+      }
+      else if(e.keyCode == 37){
+        leftPressed = true;
+      }
+    }
+
+    function keyUpHandler(e){
+      if(e.keyCode == 39){
+        rightPressed = false;
+      }
+      else if(e.keyCode == 37){
+        leftPressed = false;
+      }
+    }
+
+	function initialize(){
+	  x = field.width/2;
+    y = field.height/2;
+	  dx = 3;
+    dy = -3;
+	  playerPaddleX = (field.width - paddleWidth)/2;
+	  opponentPaddleX = (field.width - paddleWidth)/2;
+	}
+
+    function drawBall(){
+      ctx.beginPath();
+      ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+  	  ctx.fillStyle = "white";
+  	  ctx.fill();
+  	  ctx.closePath();
+    }
+
+    function drawPlayerPaddle(){
+      ctx.beginPath();
+      ctx.rect(playerPaddleX, field.height - paddleHeight, paddleWidth, paddleHeight);
+  	  ctx.fillStyle = "red";
+  	  ctx.fill();
+  	  ctx.closePath();
+    }
+
+	function drawOpponentPaddle(){
+      ctx.beginPath();
+      ctx.rect(opponentPaddleX, 0, paddleWidth, paddleHeight);
+  	  ctx.fillStyle = "black";
+  	  ctx.fill();
+  	  ctx.closePath();
+    }
+
+	function calcBallPosition(){
+    if(x + dx > field.width - ballRadius || x + dx < ballRadius){
+      dx = -dx;
+    }
+
+	  if(y + dy < ballRadius){
+        if(x + ballRadius > opponentPaddleX && x - ballRadius < opponentPaddleX + paddleWidth){
+          dy = -dy;
+        }
+        else{
+          alert("You Win!!");
+          document.location.reload();
+          initialize();
+        }
+    }
+    else if(y + dy > field.height - ballRadius){
+      if(x + ballRadius > playerPaddleX && x - ballRadius < playerPaddleX + paddleWidth){
+        dy = -dy;
+      }
+      else{
+        alert("You Lose");
+        document.location.reload();
+        initialize();
+      }
+    }
+	}
+
+  function draw() {
+    calcBallPosition();
+    if(leftPressed && playerPaddleX > 0){
+      playerPaddleX -= 10;
+    }
+    else if(rightPressed && playerPaddleX < field.width - paddleWidth){
+      playerPaddleX += 10;
+    }
+    x += dx;
+    y += dy;
+
+    ctx.clearRect(0, 0, field.width, field.height);
+    drawBall();
+    drawPlayerPaddle();
+    drawOpponentPaddle();
+	}
+
+	initialize();
+	setInterval(draw, 10);
+</script>
+
+</body>
+</html>
