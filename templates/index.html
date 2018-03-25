@@ -21,7 +21,7 @@
     var dy;
     var ballRadius = 10;
     var paddleHeight = 10;
-    var paddleWidth = 80;
+    var paddleWidth = 60;
     var playerPaddleX;
     var opponentPaddleX;
     var rightPressed = false;
@@ -51,8 +51,8 @@
 	function initialize(){
 	  x = field.width/2;
     y = field.height/2;
-	  dx = 3;
-    dy = -3;
+	  dx = 5;
+    dy = -5;
 	  playerPaddleX = (field.width - paddleWidth)/2;
 	  opponentPaddleX = (field.width - paddleWidth)/2;
 	}
@@ -109,13 +109,13 @@
 	}
 
   function draw() {
-    calcBallPosition();
     if(leftPressed && playerPaddleX > 0){
       playerPaddleX -= 10;
     }
     else if(rightPressed && playerPaddleX < field.width - paddleWidth){
       playerPaddleX += 10;
     }
+    calcBallPosition();
     x += dx;
     y += dy;
 
