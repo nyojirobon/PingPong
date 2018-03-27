@@ -17,12 +17,12 @@ class Environment:
         self.field_width = 600
         self.field_height = 400
         self.ball_radius = 10
-        self.paddle_width = 60
+        self.paddle_width = 100
         self.paddle_height = 10
         self.ball_x = self.field_width/2 # ball position(x-coordinate)
         self.ball_y = self.field_height/2 # ball position(y-coordinate)
-        self.ball_dx = np.random.choice([5, -5]) # ball moving speed(x-axis)
-        self.ball_dy = np.random.choice([5, -5]) # ball moving speed(y-axis)
+        self.ball_dx = np.random.choice([3, -3]) # ball moving speed(x-axis)
+        self.ball_dy = np.random.choice([3, -3]) # ball moving speed(y-axis)
         self.paddle_x = (self.field_width - self.paddle_width)/2 # agent's paddle position(x-coordinate)
 
     def get_reward(self):
@@ -40,14 +40,20 @@ class Environment:
             if self.ball_x + self.ball_radius > self.paddle_x and \
             self.ball_x - self.ball_radius < self.paddle_x + self.paddle_width:
                 self.ball_dy = -self.ball_dy
+                self.ball_dy = self.ball_dy+0.3 if self.ball_dy > 0 else self.ball_dy-0.3
+                self.ball_dx = self.ball_dx+0.3 if self.ball_dx > 0 else self.ball_dx-0.3
                 return 1.0
             else: # Lose this rally
                 self.ball_dy = -self.ball_dy
                 return -200.0
         elif self.ball_y + self.ball_dy > self.field_height - self.ball_radius:
             self.ball_dy = -self.ball_dy
+            self.ball_dy = self.ball_dy+0.3 if self.ball_dy > 0 else self.ball_dy-0.3
+            self.ball_dx = self.ball_dx+0.3 if self.ball_dx > 0 else self.ball_dx-0.3
             return 1.0
         else:
+            self.ball_dy = self.ball_dy-0.001 if self.ball_dy > 0 else self.ball_dy+0.001
+            self.ball_dx = self.ball_dx-0.001 if self.ball_dx > 0 else self.ball_dx+0.001
             return 1.0
 
     def move_paddle(self, direction):
@@ -95,7 +101,7 @@ class Environment:
         """
         self.ball_x = self.field_width/2
         self.ball_y = self.field_height/2
-        self.ball_dx = np.random.choice([5, -5])
-        self.ball_dy = np.random.choice([5, -5])
+        self.ball_dx = np.random.choice([3, -3])
+        self.ball_dy = np.random.choice([3, -3])
         self.paddle_x = (self.field_width - self.paddle_width)/2
         return (self.paddle_x, self.ball_x, self.ball_y, self.ball_dx, self.ball_dy)
